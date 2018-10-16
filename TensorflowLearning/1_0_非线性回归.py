@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def base_function(x_data, y_data):
+def base_method(x_data, y_data):
     x = tf.placeholder(tf.float32, [None, 1])
     y = tf.placeholder(tf.float32, [None, 1])
 
@@ -38,7 +38,7 @@ def base_function(x_data, y_data):
                 plt.pause(0.33)
 
 
-def keras_function(x_data, y_data):
+def keras_method(x_data, y_data):
     model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(units=10, activation=tf.nn.tanh, name='L1'),
         tf.keras.layers.Dense(units=1, activation=tf.nn.tanh, name='prediction')
@@ -55,5 +55,5 @@ def keras_function(x_data, y_data):
 x_data = np.linspace(-0.5, 0.5, 200)[:, np.newaxis]
 noise = np.random.normal(0, 0.02, x_data.shape)
 y_data = np.square(x_data) + noise
-# base_function(x_data, y_data)
-keras_function(x_data, y_data)
+# base_method(x_data, y_data)
+keras_method(x_data, y_data)

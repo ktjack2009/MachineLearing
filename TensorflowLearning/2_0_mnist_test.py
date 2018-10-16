@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 
-def base_function(train_images, train_labels, test_images, test_labels):
+def base_method(train_images, train_labels, test_images, test_labels):
     n_batch = 60000 // 50
 
     x = tf.placeholder(tf.float32, [None, 784])
@@ -47,4 +47,4 @@ train_images = np.reshape(train_images, [-1, 784])
 test_images = np.reshape(test_images, [-1, 784])
 train_labels = deal_label(train_labels)
 test_labels = deal_label(test_labels)
-base_function(train_images, train_labels, test_images, test_labels)
+base_method(train_images, train_labels, test_images, test_labels)
