@@ -1,3 +1,16 @@
+'''
+Embedding Projector：交互可视化工具
+默认情况下，embedding projector 会用 PCA 主成分分析方法将高维数据投影到 3D 空间, 还有一种投影方法是 T-SNE。
+
+三步：
+1) Setup a 2D tensor that holds your embedding(s).
+    embedding_var = tf.Variable(....)
+2) Periodically save your model variables in a checkpoint in LOG_DIR.
+    saver = tf.train.Saver()
+    saver.save(session, os.path.join(LOG_DIR, "model.ckpt"), step)
+3) (Optional) Associate metadata with your embedding.
+'''
+
 import os
 import numpy as np
 import tensorflow as tf
@@ -113,13 +126,13 @@ def train():
     # 定义Saver，保存模型
     saver = tf.train.Saver()
 
-    # 定义配置文件
+    # 定义配置文件(前三固定，最后指定metadata文件路径)
     config = projector.ProjectorConfig()
     embed = config.embeddings.add()
     embed.tensor_name = embedding.name
     embed.metadata_path = DIR + '/projector/3_3/metadata.tsv'
 
-    # 原始图片切分
+    # 原始图片切分(图片可以由原始数据生成)
     embed.sprite.image_path = DIR + '/projector/data/mnist_10k_sprite.png'
     embed.sprite.single_image_dim.extend([28, 28])
     projector.visualize_embeddings(projector_writer, config)
