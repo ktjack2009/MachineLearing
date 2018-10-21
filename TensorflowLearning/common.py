@@ -1,12 +1,9 @@
 import tensorflow as tf
-import numpy as np
+from tensorflow.keras.utils import to_categorical
 
 
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
+def deal_label(labels, n_classes=10):
+    return to_categorical(labels, n_classes)
 
 
 def weights_variable(shape, name=None):
