@@ -9,16 +9,16 @@ def deal_label(labels):
     return _
 
 
-def weights_variable(shape):
+def weights_variable(shape, name=None):
     # 权重初始化
     initial = tf.truncated_normal(shape=shape, stddev=0.1, dtype=tf.float32)
-    return tf.Variable(initial)
+    return tf.Variable(initial, name=name)
 
 
-def bias_variable(shape):
+def bias_variable(shape, name=None):
     # 偏置初始化
     initial = tf.constant(0.1, dtype=tf.float32, shape=shape)
-    return tf.Variable(initial)
+    return tf.Variable(initial, name=name)
 
 
 def variable_summaries(var):

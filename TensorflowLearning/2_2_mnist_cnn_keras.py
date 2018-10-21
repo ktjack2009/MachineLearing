@@ -1,13 +1,5 @@
 import tensorflow as tf
-import numpy as np
-
-
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
-
+from common import deal_label
 
 (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
 train_images, test_images = train_images / 255.0, test_images / 255.0

@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+from common import deal_label
 
 
 def base_method(train_images, train_labels, test_images, test_labels):
@@ -42,13 +43,6 @@ def base_method(train_images, train_labels, test_images, test_labels):
             acc = sess.run(accuracy, feed_dict={x: test_images, y: test_labels, keep_prob: 1})
             acc = acc * 100
             print(f'循环次数={epoch}, 准确率={acc:.2f}%')
-
-
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
 
 
 CLASS = 10

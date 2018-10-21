@@ -3,6 +3,7 @@
 
 import tensorflow as tf
 import numpy as np
+from common import deal_label
 
 
 def base_method(train_images, train_labels, test_images, test_labels):
@@ -58,19 +59,12 @@ def base_method(train_images, train_labels, test_images, test_labels):
         tf.summary.FileWriter('./logs/3_0_logs', sess.graph)
         # for epoch in range(15):
         #     sess.run(tf.assign(lr, lr * 0.95))
-        #     for n in range(n_batch):
+        #     for n in range(int(n_batch)):
         #         batch_x, batch_y = train_images[n * 50: n * 50 + 50], train_labels[n * 50: n * 50 + 50]
         #         sess.run(train_steps, feed_dict={x: batch_x, y: batch_y, keep_prob: 0.5})
         #     acc = sess.run(accuracy, feed_dict={x: test_images, y: test_labels, keep_prob: 1})
         #     acc = acc * 100
         #     print(f'循环次数={epoch}, 准确率={acc:.2f}%')
-
-
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
 
 
 CLASS = 10

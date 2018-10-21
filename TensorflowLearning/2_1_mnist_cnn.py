@@ -1,24 +1,7 @@
 # 使用CNN实现mnist手写体识别
 
 import tensorflow as tf
-import numpy as np
-
-
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
-
-
-def weight_variable(shape, name):
-    init = tf.truncated_normal(shape=shape, stddev=0.1)
-    return tf.Variable(init, name=name)
-
-
-def bias_variable(shape, name):
-    init = tf.constant(0.1, shape=shape)
-    return tf.Variable(init, name=name)
+from common import deal_label, weights_variable, bias_variable
 
 
 def conv2d(x, W):
@@ -40,7 +23,7 @@ def base_method(train_images, train_labels, test_images, test_labels):
 
     with tf.name_scope('Conv1'):
         # 初始化第一个卷积层的权重和偏置
-        W1 = weight_variable([5, 5, 1, 32], 'W1')  # 32个卷积核从深度为1的平面提取特征
+        W1 = weights_variable([5, 5, 1, 32], 'W1')  # 32个卷积核从深度为1的平面提取特征
         b1 = bias_variable([32], 'b1')
         conv2d_1 = conv2d(x, W1) + b1
         h_conv1 = tf.nn.relu(conv2d_1)
@@ -48,7 +31,7 @@ def base_method(train_images, train_labels, test_images, test_labels):
 
     with tf.name_scope('Conv2'):
         # 初始化第二个卷积层的权重和偏置
-        W2 = weight_variable([3, 3, 32, 64], 'W2')
+        W2 = weights_variable([3, 3, 32, 64], 'W2')
         b2 = bias_variable([64], 'b2')
         conv2d_2 = conv2d(h_pool1, W2) + b2
         h_conv2 = tf.nn.relu(conv2d_2)
@@ -57,13 +40,13 @@ def base_method(train_images, train_labels, test_images, test_labels):
     with tf.name_scope('fc1'):
         # 全连接层1
         flat = tf.reshape(h_pool2, [-1, 7 * 7 * 64], name='flat')
-        WC1 = weight_variable([7 * 7 * 64, 1024], name='WC1')
+        WC1 = weights_variable([7 * 7 * 64, 1024], name='WC1')
         bc1 = bias_variable([1024], 'bc1')
         h_fc1 = tf.nn.relu(flat @ WC1 + bc1)
 
     with tf.name_scope('fc2'):
         # 全连接层2
-        WC2 = weight_variable([1024, 10], name='WC2')
+        WC2 = weights_variable([1024, 10], name='WC2')
         bc2 = bias_variable([10], 'bc2')
         prediction = tf.nn.softmax(h_fc1 @ WC2 + bc2)
 
@@ -76,7 +59,7 @@ def base_method(train_images, train_labels, test_images, test_labels):
     with tf.Session() as sess:
         sess.run(init)
         for epoch in range(20):
-            for n in range(n_batch):
+            for n in range(int(n_batch)):
                 batch_x, batch_y = train_images[n * 50: n * 50 + 50], train_labels[n * 50: n * 50 + 50]
                 sess.run(train_steps, feed_dict={x: batch_x, y: batch_y})
             acc = sess.run(accuracy, feed_dict={x: test_images, y: test_labels})

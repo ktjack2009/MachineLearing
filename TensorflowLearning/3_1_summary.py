@@ -1,23 +1,6 @@
 import tensorflow as tf
 import numpy as np
-
-
-def deal_label(labels):
-    _ = np.zeros([len(labels), 10], dtype=np.float32)
-    for i in range(len(labels)):
-        _[i][labels[i]] = 1
-    return _
-
-
-def variable_summary(var):
-    with tf.name_scope('summaries'):
-        mean = tf.reduce_mean(var)
-        tf.summary.scalar('mean', mean)  # 平均值散点图
-        stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
-        tf.summary.scalar('stddev', stddev)  # 标准差散点图
-        tf.summary.scalar('max', tf.reduce_max(var))
-        tf.summary.scalar('min', tf.reduce_min(var))
-        tf.summary.histogram('histogram', var)  # 直方图
+from common import deal_label, variable_summaries
 
 
 def base_method(train_images, train_labels, test_images, test_labels):
@@ -30,10 +13,10 @@ def base_method(train_images, train_labels, test_images, test_labels):
     with tf.name_scope('layer'):
         with tf.name_scope('Weights'):
             W = tf.Variable(tf.truncated_normal([784, 10], mean=0, stddev=0.1), name='W')
-            variable_summary(W)
+            variable_summaries(W)
         with tf.name_scope('biases'):
             b = tf.Variable(tf.constant(0.1, tf.float32, shape=[10]), name='b')
-            variable_summary(b)
+            variable_summaries(b)
         with tf.name_scope('prediction'):
             prediction = tf.nn.softmax(x @ W + b)
 
