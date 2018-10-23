@@ -1,7 +1,7 @@
 # 使用CNN实现mnist手写体识别
 
 import tensorflow as tf
-from common import deal_label, weights_variable, bias_variable
+from TensorflowLearning.common import deal_label, weights_variable, bias_variable
 
 
 def conv2d(x, W):

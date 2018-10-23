@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from common import deal_label, variable_summaries
+from TensorflowLearning.common import deal_label, variable_summaries
 
 
 def base_method(train_images, train_labels, test_images, test_labels):

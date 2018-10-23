@@ -15,7 +15,7 @@ import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.tensorboard.plugins import projector
-from common import deal_label, nn_layer
+from TensorflowLearning.common import deal_label, nn_layer
 
 DIR = os.path.dirname(__file__)
 # 训练次数

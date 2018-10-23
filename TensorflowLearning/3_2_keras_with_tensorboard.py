@@ -1,5 +1,5 @@
 import tensorflow as tf
-from common import deal_label
+from TensorflowLearning.common import deal_label
 from tensorflow.keras.callbacks import TensorBoard
 
 (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()

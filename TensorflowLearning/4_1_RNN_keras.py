@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.callbacks import TensorBoard
-from common import deal_label
+from TensorflowLearning.common import deal_label
 
 n_inputs = 28  # 一次传1行，传28个像素
 max_time = 28  # 一幅图有28行

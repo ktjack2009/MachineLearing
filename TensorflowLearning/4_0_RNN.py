@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from common import deal_label, weights_variable, bias_variable
+from TensorflowLearning.common import deal_label, weights_variable, bias_variable
 
 n_inputs = 28  # 一次传1行，传28个像素
 max_time = 28  # 一幅图有28行
