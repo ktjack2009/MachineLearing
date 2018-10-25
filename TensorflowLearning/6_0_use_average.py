@@ -82,9 +82,14 @@ def train():
                 xs = train_images[i * BATCH_SIZE: (i + 1) * BATCH_SIZE]
                 ys = train_labels[i * BATCH_SIZE: (i + 1) * BATCH_SIZE]
                 sess.run(train_op, feed_dict={x: xs, y_: ys})
-            acc = sess.run(accuracy, feed_dict=test_feed)
-            acc2 = sess.run(average_2, feed_dict=test_feed)
-            print(f"After {epoch} training step(s), test accuracy using average model is {acc:.4f} {acc2:.4f}")
+            acc = sess.run(accuracy, feed_dict=test_feed) * 100
+            acc2 = sess.run(average_2, feed_dict=test_feed) * 100
+            print(f"After {epoch} training step(s), test accuracy using average model is {acc:.2f}% {acc2:.2f}%")
 
 
-train()
+def main(argv=None):
+    train()
+
+
+if __name__ == '__main__':
+    tf.app.run()
