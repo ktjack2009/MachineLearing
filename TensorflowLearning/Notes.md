@@ -154,8 +154,55 @@ with tf.variable_scope('', reuse=True):
 ```
 import tensorflow as tf
 
-saver = tf.train.import_meta_graph(path)
+saver = tf.train.import_meta_graph('./model.ckpt.meta')
 
 with tf.Session() as sess:
-    saver.restore()
+    saver.restore(sess, './model.ckpt')
+    print(sess.run(tf.get_default_graph().get_tensor_by_name('add:0')))
+```
+
+如果只需要保存或者加载部分变量，比如保存一个6层神经网络的前5层变量，而重新训练第6层。为了保存或者加载部分变量，在声明tf.train.Saver类时可以提供一个列表来指定需要保存或者加的变量。
+
+```
+v1 = tf.Variable(tf.constant(1.0, shape=[1]), name='other-v1')
+v2 = tf.Variable(tf.constant(2.0, shape=[1]), name='other-v2')
+
+# 原来名称为v1的变量现在加载到变量名'other-v1'
+saver = tf.train.Saver({'v1': v1, 'v2': v2})
+```
+
+使用tf.train.Saver会保存运行TensorFlow程序所需要的全部信息。在只做测试或者离线预测的时候，就不需要获取这些细节。Tensorflow提供了convert_variables_to_constants函数，通过这个函数可以将计算图中的变量及其取值通过常量的方式保存，这样整个TensorFlow计算图可以统一存放在一个文件中。
+
+```
+import tensorflow as tf
+from tensorflow.python.framework import graph_util
+
+v1 = tf.Variable(tf.constant(1.0, shape=[1], name='v1'))
+v2 = tf.Variable(tf.constant(2.0, shape=[1], name='v2'))
+result = v1 + v2
+
+init = tf.global_variables_initializer()
+with tf.Session() as sess:
+    sess.run(init)
+    # 导出当前计算图的GraphDef部分，只需要这一部分就可以完成从输入层到输出层的计算过程
+    graph_def = tf.get_default_graph().as_graph_def()
+    output_graph_def = graph_util.convert_variables_to_constants(sess, graph_def, ['add'])
+
+    # 将导出的模型存入文件
+    with tf.gfile.GFile('./model.pb', 'wb') as f:
+        f.write(output_graph_def.SerializeToString())
+```
+
+通过以下程序可以直接计算定义的加法运算的结果。可以时间迁移学习
+
+```
+import tensorflow as tf
+from tensorflow.python.platform import gfile
+
+with tf.Session() as sess:
+    with gfile.FastGFile('./model.pb', 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        result = tf.import_graph_def(graph_def, return_elements=['add:0'])
+        print(sess.run(result)[0])
 ```
