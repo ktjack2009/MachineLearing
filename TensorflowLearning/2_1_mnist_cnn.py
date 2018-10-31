@@ -1,7 +1,8 @@
 # 使用CNN实现mnist手写体识别
 
 import tensorflow as tf
-from TensorflowLearning.common import deal_label, weights_variable, bias_variable
+from TensorflowLearning.common import weights_variable, bias_variable
+from Data.mnist_data import train_images, train_labels, test_images, test_labels
 
 
 def conv2d(x, W):
@@ -67,10 +68,6 @@ def base_method(train_images, train_labels, test_images, test_labels):
             print(f'循环次数={epoch}, 准确率={acc:.2f}%')
 
 
-(train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
-train_images, test_images = train_images / 255.0, test_images / 255.0
 train_images = train_images.reshape([-1, 28, 28, 1])
 test_images = test_images.reshape([-1, 28, 28, 1])
-train_labels = deal_label(train_labels)
-test_labels = deal_label(test_labels)
 base_method(train_images, train_labels, test_images, test_labels)

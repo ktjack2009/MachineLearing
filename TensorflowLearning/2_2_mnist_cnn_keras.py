@@ -1,12 +1,8 @@
 import tensorflow as tf
-from TensorflowLearning.common import deal_label
+from Data.mnist_data import train_images, train_labels, test_images, test_labels
 
-(train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
-train_images, test_images = train_images / 255.0, test_images / 255.0
 train_images = train_images.reshape([-1, 28, 28, 1])
 test_images = test_images.reshape([-1, 28, 28, 1])
-train_labels = deal_label(train_labels)
-test_labels = deal_label(test_labels)
 
 models = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), padding='SAME', activation='relu', input_shape=(28, 28, 1)),
