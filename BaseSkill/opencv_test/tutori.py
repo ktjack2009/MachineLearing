@@ -151,6 +151,27 @@ def fill_binary():
     cv.imshow('demo', src)
 
 
+def blur_demo():
+    # 模糊操作
+    def custom_blur_demo(image):
+        # 自定义模糊
+        # kernel = np.ones([5, 5], np.float32) / 25
+        kernel = np.array([[0, -1, 0], [0, 3, 0], [0, -1, 0]], np.float32) / 1  # 锐化
+        dst = cv.filter2D(image, -1, kernel=kernel)
+        cv.imshow('custom', dst)
+
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    cv.imshow('src', src)
+
+    dst = cv.blur(src, (5, 5))  # 均值模糊，去随机噪声
+    median = cv.medianBlur(src, 5)  # 中值模糊，去椒盐噪声
+    gaussian = cv.GaussianBlur(src, (3, 3), 4)  # 高斯模糊
+    cv.imshow('dst', dst)
+    cv.imshow('median', median)
+    cv.imshow('gaussian', gaussian)
+    custom_blur_demo(src)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -160,8 +181,9 @@ def main():
     # logic_demo()
     # contrast_brightness_demo()
     # roi_demo()
-    fill_color_demo()
+    # fill_color_demo()
     # fill_binary()
+    blur_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
