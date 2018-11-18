@@ -9,8 +9,6 @@ def create_img():
     src[:, :, 2] = np.ones((400, 400)) * 255
     cv.namedWindow('input image', cv.WINDOW_AUTOSIZE)  # 设置图像显示窗口
     cv.imshow('input image', src)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
 
 
 def video_demo():
@@ -46,9 +44,6 @@ def pic_demo(path):
     Ycrcb = cv.cvtColor(src, cv.COLOR_BGR2YCrCb)
     cv.imshow('Ycrcb', Ycrcb)
 
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
 
 def extract_object_demo(path):
     src = cv.imread(path)
@@ -65,8 +60,6 @@ def extract_object_demo(path):
     # cv.imshow('b', b)
     # cv.imshow('g', g)
     # cv.imshow('r', r)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
 
 
 def calculate_pic():
@@ -103,13 +96,24 @@ def calculate_pic():
     cv.destroyAllWindows()
 
 
+def logic_demo():
+    src1 = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    src2 = cv.imread('/Users/dsj/Desktop/timg2.jpeg')
+    src1 = cv.resize(src1, src2.shape[:2][::-1])  # resize图片
+    cv.imshow('logic_and', cv.bitwise_and(src1, src2))
+    cv.imshow('logic_or', cv.bitwise_or(src1, src2))
+    cv.imshow('logic_xor', cv.bitwise_xor(src1, src2))
+
+
 def main():
     # create_img()
     # video_demo()
     # pic_demo('/Users/dsj/Desktop/timg.jpeg')
     # extract_object_demo('/Users/dsj/Desktop/timg.jpeg')
     # calculate_pic()
-    pass
+    logic_demo()
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 
 if __name__ == '__main__':
