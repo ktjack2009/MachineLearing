@@ -105,13 +105,24 @@ def logic_demo():
     cv.imshow('logic_xor', cv.bitwise_xor(src1, src2))
 
 
+def contrast_brightness_demo():
+    c = 1  # 对比度
+    b = 0  # 亮度
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    bank = np.zeros(src.shape, dtype=src.dtype)
+    dst = cv.addWeighted(src, c, bank, 1 - c, b)
+    cv.imshow('dst', dst)
+    cv.imshow('src', src)
+
+
 def main():
     # create_img()
     # video_demo()
     # pic_demo('/Users/dsj/Desktop/timg.jpeg')
     # extract_object_demo('/Users/dsj/Desktop/timg.jpeg')
     # calculate_pic()
-    logic_demo()
+    # logic_demo()
+    contrast_brightness_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
