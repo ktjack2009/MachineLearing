@@ -190,6 +190,27 @@ def epf():
     bi_demo2(src)
 
 
+def binary_image():
+    # 图像二值化
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+
+    def threshold_demo():
+        gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
+        ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+        # ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_TOZERO)
+        # ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_TRIANGLE)
+        cv.imshow('binary', binary)
+
+    def local_threshold():
+        # 局部二值化
+        gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
+        # binary = cv.adaptiveThreshold(gray, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 25, 10)
+        binary = cv.adaptiveThreshold(gray, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 25, 10)
+        cv.imshow('binary', binary)
+
+    local_threshold()
+
+
 def main():
     # create_img()
     # video_demo()
@@ -202,7 +223,8 @@ def main():
     # fill_color_demo()
     # fill_binary()
     # blur_demo()
-    epf()
+    # epf()
+    binary_image()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
