@@ -172,6 +172,24 @@ def blur_demo():
     custom_blur_demo(src)
 
 
+def epf():
+    # 边缘保留滤波【高斯双边、均值迁移】
+    def bi_demo(image):
+        # 高斯双边
+        dst = cv.bilateralFilter(image, 0, 100, 2)
+        cv.imshow('bi_demo', dst)
+
+    def bi_demo2(image):
+        # 均值迁移
+        dst = cv.pyrMeanShiftFiltering(image, 5, 10)
+        cv.imshow('bi_demo2', dst)
+
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    cv.imshow('src', src)
+    bi_demo(src)
+    bi_demo2(src)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -183,7 +201,8 @@ def main():
     # roi_demo()
     # fill_color_demo()
     # fill_binary()
-    blur_demo()
+    # blur_demo()
+    epf()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
