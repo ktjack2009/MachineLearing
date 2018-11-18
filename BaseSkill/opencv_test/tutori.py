@@ -115,6 +115,42 @@ def contrast_brightness_demo():
     cv.imshow('src', src)
 
 
+def roi_demo():
+    # 通过numpy获取roi
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    cv.imshow('src0', src)
+    face = src[90:300, 300:500]
+    gray = cv.cvtColor(face, cv.COLOR_BGR2GRAY)
+    back_face = cv.cvtColor(gray, cv.COLOR_GRAY2BGR)
+    src[90:300, 300:500] = back_face
+    cv.imshow('src', src)
+
+
+def fill_color_demo():
+    # 泛洪填充
+    src = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    copyImg = src.copy()
+    h, w = src.shape[:2]
+    mask = np.zeros([h + 2, w + 2], np.uint8)  # mask必须是这中形式
+    # 参数
+    # 从(30, 30)像素点开始，填充为(0, 255, 255)【黄色】
+    # 高值(100, 100, 100), 低值(50, 50, 50) 越窄越精细
+    cv.floodFill(copyImg, mask, (30, 30), (0, 255, 255), (20, 20, 20), (20, 20, 20), cv.FLOODFILL_FIXED_RANGE)
+    cv.imshow('src', src)
+    cv.imshow('demo', copyImg)
+
+
+def fill_binary():
+    # 二值图像填充
+    src = np.zeros([400, 400, 3], np.uint8)
+    src[100:300, 100:300, :] = 255
+    cv.imshow('src', src)
+    mask = np.ones([402, 402, 1], np.uint8)
+    mask[101:301, 101:301] = 0
+    cv.floodFill(src, mask, (200, 200), (0, 0, 255), cv.FLOODFILL_MASK_ONLY)
+    cv.imshow('demo', src)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -122,7 +158,10 @@ def main():
     # extract_object_demo('/Users/dsj/Desktop/timg.jpeg')
     # calculate_pic()
     # logic_demo()
-    contrast_brightness_demo()
+    # contrast_brightness_demo()
+    # roi_demo()
+    fill_color_demo()
+    # fill_binary()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
