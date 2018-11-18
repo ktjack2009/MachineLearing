@@ -211,6 +211,36 @@ def binary_image():
     local_threshold()
 
 
+def pyramid_demo():
+    # 图像金字塔
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    level = 3
+    temp = image.copy()
+    pyramid_images = []
+    for i in range(level):
+        dst = cv.pyrDown(temp)
+        pyramid_images.append(dst)
+        cv.imshow(f'pyramid_down_{i}', dst)
+        temp = dst.copy()
+    return pyramid_images
+
+
+def laplace_demo():
+    # 拉普拉斯金字塔
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    pyramid_images = pyramid_demo()
+    level = len(pyramid_images)
+    for i in range(level - 1, -1, -1):
+        if (i - 1) < 0:
+            expand = cv.pyrUp(pyramid_images[i], dstsize=image.shape[:2][::-1])
+            lpls = cv.subtract(image, expand)
+            cv.imshow(f'lpls_{i}', lpls)
+        else:
+            expand = cv.pyrUp(pyramid_images[i], dstsize=pyramid_images[i - 1].shape[:2][::-1])
+            lpls = cv.subtract(pyramid_images[i - 1], expand)
+            cv.imshow(f'lpls_{i}', lpls)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -224,7 +254,9 @@ def main():
     # fill_binary()
     # blur_demo()
     # epf()
-    binary_image()
+    # binary_image()
+    # pyramid_demo()
+    laplace_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
