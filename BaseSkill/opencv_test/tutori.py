@@ -241,6 +241,31 @@ def laplace_demo():
             cv.imshow(f'lpls_{i}', lpls)
 
 
+def sobel_demo():
+    # 图像梯度
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    grad_x = cv.Sobel(image, cv.CV_32F, 1, 0)
+    grad_y = cv.Sobel(image, cv.CV_32F, 0, 1)
+    # cv.Scharr() 是Sobel算子的增强版
+    gradx = cv.convertScaleAbs(grad_x)
+    grady = cv.convertScaleAbs(grad_y)
+    cv.imshow("gradient-x", gradx)
+    cv.imshow("gradient-y", grady)
+    gradxy = cv.addWeighted(gradx, 0.5, grady, 0.5, 0)
+    cv.imshow("gradient", gradxy)
+
+
+def laplacian_demo():
+    # 图像梯度，拉普拉斯算子
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    # dst = cv.Laplacian(image, cv.CV_32F)
+
+    kernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])  # 自定义核
+    dst = cv.filter2D(image, cv.CV_32F, kernel=kernel)
+    lpls = cv.convertScaleAbs(dst)
+    cv.imshow("laplacian_demo", lpls)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -256,7 +281,9 @@ def main():
     # epf()
     # binary_image()
     # pyramid_demo()
-    laplace_demo()
+    # laplace_demo()
+    # sobel_demo()
+    laplacian_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
