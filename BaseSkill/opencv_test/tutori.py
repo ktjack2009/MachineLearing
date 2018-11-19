@@ -266,6 +266,21 @@ def laplacian_demo():
     cv.imshow("laplacian_demo", lpls)
 
 
+def canny_demo():
+    # Canny边缘提取
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    blurred = cv.GaussianBlur(image, (3, 3), 0)     # 1. 高斯模糊
+    gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)  # 2. 灰度
+    grad_x = cv.Sobel(gray, cv.CV_16SC1, 1, 0)
+    grad_y = cv.Sobel(gray, cv.CV_16SC1, 0, 1)      # 3. 梯度
+    edg_output0 = cv.Canny(grad_x, grad_y, 50, 150) # 4. 边缘
+    edg_output1 = cv.Canny(gray, 50, 150)           # 4. 效果一样
+    # dst0 = cv.bitwise_and(image, image, mask=edg_output0)
+    # dst1 = cv.bitwise_and(image, image, mask=edg_output1)
+    cv.imshow('demo0', edg_output0)
+    cv.imshow('demo1', edg_output1)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -283,7 +298,8 @@ def main():
     # pyramid_demo()
     # laplace_demo()
     # sobel_demo()
-    laplacian_demo()
+    # laplacian_demo()
+    canny_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
