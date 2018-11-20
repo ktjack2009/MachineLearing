@@ -277,8 +277,9 @@ def canny_demo():
     edg_output1 = cv.Canny(gray, 50, 150)  # 4. 效果一样
     # dst0 = cv.bitwise_and(image, image, mask=edg_output0)
     # dst1 = cv.bitwise_and(image, image, mask=edg_output1)
-    cv.imshow('demo0', edg_output0)
-    cv.imshow('demo1', edg_output1)
+    # cv.imshow('demo0', edg_output0)
+    # cv.imshow('demo1', edg_output1)
+    return edg_output1
 
 
 def line_detection():
@@ -327,6 +328,30 @@ def circles_detect():
     cv.imshow('circles', image)
 
 
+def contours_demo():
+    # 轮廓发现
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    dst = cv.GaussianBlur(image, (3, 3), 0)
+    gray = cv.cvtColor(dst, cv.COLOR_BGR2GRAY)
+    ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+    clone_image, contours, heriachy = cv.findContours(binary, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    for i, contour in enumerate(contours):
+        cv.drawContours(image, contours, i, (0, 0, 255), 2)  # -1 为填充轮廓
+    cv.imshow('demo', image)
+
+
+def contours_demo2():
+    # 也可以使用Canny进行边缘检测
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    dst = cv.GaussianBlur(image, (3, 3), 0)
+    gray = cv.cvtColor(dst, cv.COLOR_BGR2GRAY)
+    binary = cv.Canny(gray, 50, 150)
+    clone_image, contours, heriachy = cv.findContours(binary, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    for i, contour in enumerate(contours):
+        cv.drawContours(image, contours, i, (0, 0, 255), 2)  # -1 为填充轮廓
+    cv.imshow('demo', image)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -348,7 +373,9 @@ def main():
     # canny_demo()
     # line_detection()
     # line_detect_possible_demo()
-    circles_detect()
+    # circles_detect()
+    contours_demo()
+    # contours_demo2()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
