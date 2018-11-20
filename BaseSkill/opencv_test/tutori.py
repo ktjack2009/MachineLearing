@@ -269,16 +269,50 @@ def laplacian_demo():
 def canny_demo():
     # Canny边缘提取
     image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
-    blurred = cv.GaussianBlur(image, (3, 3), 0)     # 1. 高斯模糊
+    blurred = cv.GaussianBlur(image, (3, 3), 0)  # 1. 高斯模糊
     gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)  # 2. 灰度
     grad_x = cv.Sobel(gray, cv.CV_16SC1, 1, 0)
-    grad_y = cv.Sobel(gray, cv.CV_16SC1, 0, 1)      # 3. 梯度
-    edg_output0 = cv.Canny(grad_x, grad_y, 50, 150) # 4. 边缘
-    edg_output1 = cv.Canny(gray, 50, 150)           # 4. 效果一样
+    grad_y = cv.Sobel(gray, cv.CV_16SC1, 0, 1)  # 3. 梯度
+    edg_output0 = cv.Canny(grad_x, grad_y, 50, 150)  # 4. 边缘
+    edg_output1 = cv.Canny(gray, 50, 150)  # 4. 效果一样
     # dst0 = cv.bitwise_and(image, image, mask=edg_output0)
     # dst1 = cv.bitwise_and(image, image, mask=edg_output1)
     cv.imshow('demo0', edg_output0)
     cv.imshow('demo1', edg_output1)
+
+
+def line_detection():
+    image = cv.imread('/Users/dsj/Desktop/timg3.jpeg')
+    blurred = cv.GaussianBlur(image, (3, 3), 0)
+    gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
+    edg = cv.Canny(gray, 50, 150)
+    lines = cv.HoughLines(edg, 1, np.pi / 180, 200)
+    # cv.imshow('edg', edg)
+    for line in lines:
+        rho, theta = line[0]
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a + rho
+        y0 = b + rho
+        x1 = int(x0 + 1000 * (-b))
+        y1 = int(y0 + 1000 * a)
+        x2 = int(x0 - 1000 * (-b))
+        y2 = int(y0 - 1000 * a)
+        cv.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    cv.imshow('line', image)
+
+
+def line_detect_possible_demo():
+    image = cv.imread('/Users/dsj/Desktop/timg3.jpeg')
+    blurred = cv.GaussianBlur(image, (3, 3), 0)
+    gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
+    edg = cv.Canny(gray, 50, 150, apertureSize=3)
+    cv.imshow('edg', edg)
+    lines = cv.HoughLinesP(edg, 1, np.pi / 180, 200, minLineLength=50, maxLineGap=15)
+    for line in lines:
+        (x1, y1, x2, y2) = line[0]
+        cv.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    cv.imshow('line', image)
 
 
 def main():
@@ -299,7 +333,9 @@ def main():
     # laplace_demo()
     # sobel_demo()
     # laplacian_demo()
-    canny_demo()
+    # canny_demo()
+    # line_detection()
+    line_detect_possible_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
