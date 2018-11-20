@@ -365,6 +365,26 @@ def erode_dilate():
     cv.imshow('dilate', dilate)
 
 
+def open_and_close():
+    def open_demo(image, kernel):
+        # 开操作，腐蚀+膨胀，去除小的干扰快
+        return cv.morphologyEx(image, cv.MORPH_OPEN, kernel)
+
+    def close_demo(image, kernel):
+        # 闭操作，膨胀+腐蚀，填充闭合区域
+        return cv.morphologyEx(image, cv.MORPH_CLOSE, kernel)
+
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
+    open_obj = open_demo(binary, kernel)
+    close_obj = close_demo(binary, kernel)
+    cv.imshow('binary', binary)
+    cv.imshow('open', open_obj)
+    cv.imshow('close', close_obj)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -389,7 +409,8 @@ def main():
     # circles_detect()
     # contours_demo()
     # contours_demo2()
-    erode_dilate()
+    # erode_dilate()
+    open_and_close()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
