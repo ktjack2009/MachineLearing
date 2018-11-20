@@ -315,6 +315,18 @@ def line_detect_possible_demo():
     cv.imshow('line', image)
 
 
+def circles_detect():
+    image = cv.imread('/Users/dsj/Desktop/circle.jpeg')
+    dst = cv.pyrMeanShiftFiltering(image, 0, 100)
+    gray = cv.cvtColor(dst, cv.COLOR_BGR2GRAY)
+    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 200, param1=50, param2=30, minRadius=0)
+    circles = np.uint16(np.around(circles))
+    for i in circles[0, :]:
+        cv.circle(image, (i[0], i[1]), i[2], (0, 0, 255), 2)
+        cv.circle(image, (i[0], i[1]), 2, (255, 0, 0), 2)
+    cv.imshow('circles', image)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -335,7 +347,8 @@ def main():
     # laplacian_demo()
     # canny_demo()
     # line_detection()
-    line_detect_possible_demo()
+    # line_detect_possible_demo()
+    circles_detect()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
