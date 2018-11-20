@@ -352,6 +352,19 @@ def contours_demo2():
     cv.imshow('demo', image)
 
 
+def erode_dilate():
+    # 腐蚀和膨胀
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
+    erode = cv.erode(binary, kernel)
+    dilate = cv.dilate(binary, kernel)
+    cv.imshow('binary', binary)
+    cv.imshow('erode', erode)
+    cv.imshow('dilate', dilate)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -374,8 +387,9 @@ def main():
     # line_detection()
     # line_detect_possible_demo()
     # circles_detect()
-    contours_demo()
+    # contours_demo()
     # contours_demo2()
+    erode_dilate()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
