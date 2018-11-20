@@ -385,6 +385,28 @@ def open_and_close():
     cv.imshow('close', close_obj)
 
 
+def hat_demo():
+    # 顶帽操作\黑帽操作
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
+    top_hat = cv.morphologyEx(gray, cv.MORPH_TOPHAT, kernel)
+    black_hat = cv.morphologyEx(gray, cv.MORPH_BLACKHAT, kernel)
+    cv.imshow('top_hat', top_hat)
+    cv.imshow('black_hat', black_hat)
+
+
+def gradient_demo():
+    image = cv.imread('/Users/dsj/Desktop/timg.jpeg')
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
+    dm = cv.dilate(image, kernel)
+    em = cv.erode(image, kernel)
+    dst1 = cv.subtract(image, em)
+    dst2 = cv.subtract(dm, image)
+    cv.imshow('internal', dst1)
+    cv.imshow('external', dst2)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -410,7 +432,9 @@ def main():
     # contours_demo()
     # contours_demo2()
     # erode_dilate()
-    open_and_close()
+    # open_and_close()
+    # hat_demo()
+    gradient_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
