@@ -407,6 +407,35 @@ def gradient_demo():
     cv.imshow('external', dst2)
 
 
+def watershed_demo():
+    # 分水岭算法
+    image = cv.imread('/Users/dsj/Desktop/circle.jpeg')
+    blur = cv.pyrMeanShiftFiltering(image, 10, 100, )
+    gray = cv.cvtColor(blur, cv.COLOR_BGR2GRAY)
+    ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+    cv.imshow('binary', binary)
+
+    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
+    mb = cv.morphologyEx(binary, cv.MORPH_OPEN, kernel, iterations=2)
+    sure_bg = cv.dilate(mb, kernel, iterations=3)
+    cv.imshow('sure_bg', sure_bg)
+
+    dist = cv.distanceTransform(mb, cv.DIST_L2, 3)
+    dist_output = cv.normalize(dist, 0, 1.0, cv.NORM_MINMAX)
+    cv.imshow('dist', dist_output * 50)
+
+    ret, surface = cv.threshold(dist, dist.max() * 0.6, 255, cv.THRESH_BINARY)
+    cv.imshow('surface', surface)
+    surface_fg = np.uint8(surface)
+    unknown = cv.subtract(sure_bg, surface_fg)
+    ret, markers = cv.connectedComponents(surface_fg)
+    markers = markers + 1
+    markers[unknown == 255] = 0
+    markers = cv.watershed(image, markers=markers)
+    image[markers == -1] = [0, 0, 255]
+    cv.imshow('result', image)
+
+
 def main():
     # create_img()
     # video_demo()
@@ -434,7 +463,8 @@ def main():
     # erode_dilate()
     # open_and_close()
     # hat_demo()
-    gradient_demo()
+    # gradient_demo()
+    watershed_demo()
     cv.waitKey(0)
     cv.destroyAllWindows()
 
