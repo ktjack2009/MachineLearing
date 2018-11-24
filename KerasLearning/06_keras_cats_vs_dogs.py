@@ -57,7 +57,7 @@ def train():
     history = model.fit_generator(
         generator=train_generator,
         steps_per_epoch=100,
-        epochs=30,
+        epochs=11,  # 训练11次达到最好效果
         validation_data=validation_generator,
         validation_steps=50
     )
