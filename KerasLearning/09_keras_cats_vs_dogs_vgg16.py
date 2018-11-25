@@ -13,12 +13,17 @@ validation_dir = os.path.join(DATA_PATH, 'validation')
 test_dir = os.path.join(DATA_PATH, 'test')
 conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
 
+for layer in conv_base.layers:
+    if layer.name.startswith('block5_conv'):
+        layer.trainable = True  # 只有block5的参数可训练
+    else:
+        layer.trainable = False
+
 model = models.Sequential()
 model.add(conv_base)
 model.add(layers.Flatten())
 model.add(layers.Dense(256, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
-conv_base.trainable = False  # 设置为False，默认参数不训练，必须在模型编译之前设置
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
@@ -44,8 +49,6 @@ validation_generator = validation_datagen.flow_from_directory(
     batch_size=20,
     class_mode='binary'
 )
-model.compile(optimizer=optimizers.RMSprop(lr=2e-5), loss='binary_corssentropy', metrics=['acc'])
-history = model.fit_generator(train_generator, steps_per_epoch=100, epochs=30,
+model.compile(optimizer=optimizers.RMSprop(lr=1e-5), loss='binary_corssentropy', metrics=['acc'])
+history = model.fit_generator(train_generator, steps_per_epoch=100, epochs=100,
                               validation_data=validation_generator, validation_steps=50)
-
-model.predict()
