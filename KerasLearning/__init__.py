@@ -1,18 +1,37 @@
-import os, pickle
+import os
+import cv2 as cv
+import numpy as np
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-history_file = os.path.join(DIR, 'models', 'history_2.pk')
+DATA_PATH = os.path.join(os.path.dirname(DIR), 'Data', 'cats_and_dogs_small')
+model_path = os.path.join(DIR, 'models')
+test_dir = os.path.join(DATA_PATH, 'test')
+i = 1500
+image_1 = os.path.join(test_dir, 'cats', f'cat.{i}.jpg')
+image_2 = os.path.join(test_dir, 'dogs', f'dog.{i}.jpg')
 
-with open(history_file, 'rb') as f:
-    history = pickle.load(f)
-print(len(history['val_loss']))
+image_1 = cv.imread(image_1)
+image_2 = cv.imread(image_2)
+image_1 = cv.resize(image_1, (150, 150)) / 255.0
+image_2 = cv.resize(image_2, (150, 150)) / 255.0
+image_1 = np.reshape(image_1, (-1, 150, 150, 3))
+image_2 = np.reshape(image_2, (-1, 150, 150, 3))
 
-import matplotlib.pyplot as plt
+# cv.imshow('1', image_1)
+# cv.imshow('2', image_2)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
-fig, axes = plt.subplots(nrows=1, ncols=2)  # 1行，2列
+from tensorflow.keras.models import load_model
+from tensorflow.keras.applications import VGG16
 
-axes[0].plot(range(len(history['val_acc'])), history['val_acc'], 'r', label='val_acc')
-axes[0].plot(range(len(history['acc'])), history['acc'], 'black', label='acc')
-axes[1].plot(range(len(history['val_loss'])), history['val_loss'], 'r', label='val_acc')
-axes[1].plot(range(len(history['loss'])), history['loss'], 'black', label='acc')
-plt.show()
+conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+features_batch_1 = conv_base.predict(image_1)
+features_batch_1 = np.reshape(features_batch_1, (1, -1))
+features_batch_2 = conv_base.predict(image_2)
+features_batch_2 = np.reshape(features_batch_2, (1, -1))
+
+model = load_model(os.path.join(model_path, 'cats_and_dogs_small_3.h5'))
+y1 = model.predict(features_batch_1)
+y2 = model.predict(features_batch_2)
+print((y1[0], y2[0]))
